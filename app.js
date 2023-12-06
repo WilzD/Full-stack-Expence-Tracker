@@ -17,8 +17,11 @@ app.use(cors())
 const expenceRoute=require('./routes/expenceRoute')
 app.use(expenceRoute) 
 
+const userRoute=require('./routes/userRoute')
+app.use(userRoute)
+
 //schemas creation during runtime
-sequelizeDB.sync('/update-expence/:id').then(() => {
+sequelizeDB.sync().then(() => {
     app.listen(3000)
 }).catch(err => console.log(err))
 
