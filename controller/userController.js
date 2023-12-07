@@ -2,7 +2,12 @@
 const User = require('../models/user')
 //for password hashing
 const bcrypt = require('bcrypt')
+//for creating token
+const jwt=require('jsonwebtoken')
 
+function generateAccessToken(id){
+ return jwt.sign({user:id},'5TObIsTmyTGZ40VdVKkloIFgBYyerMybLzl+Ijajbgid+FkZocjgEfDKVgtvVte/')
+}
 //adding a user
 exports.postUser = async (req, res) => {
     try {
@@ -46,7 +51,7 @@ exports.getUser = async (req, res) => {
             if (data[0].name === name) {
                 bcrypt.compare(password,data[0].password,(err,result)=>{
                     if (result) {
-                        res.status(200).json({ success: true, message: 'user login successfully' })
+                        res.status(200).json({ success: true, message: 'user login successfully' ,token:generateAccessToken(data[0].id)})//making token by passing id to the function
                     }
                     else {
                         return res.status(402).json({ success: false, message: "wrong password" })
@@ -65,4 +70,3 @@ exports.getUser = async (req, res) => {
        res.status(404).json({ success: false, message: "user not found" })
     }
 }
-

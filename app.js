@@ -18,7 +18,14 @@ const expenceRoute=require('./routes/expenceRoute')
 app.use(expenceRoute) 
 
 const userRoute=require('./routes/userRoute')
+
 app.use(userRoute)
+
+//making schemas relations
+const Expence = require('./models/expence')
+const User = require('./models/user')
+User.hasMany(Expence,{constraints:true,onDelete:'CASCADE'})
+Expence.belongsTo(User)
 
 //schemas creation during runtime
 sequelizeDB.sync().then(() => {

@@ -5,25 +5,30 @@ const Expence = require('../models/expence')
 
 //getting all expences
 exports.getExpences = async (req, res) => {
-    const expences = await Expence.findAll()
-    return res.status(200).json(expences)
+    //using magic function ti=o get data of that perticular user
+     const expences=await req.user.getExpences()// this will give us data of that perticular user only
+     return res.status(200).json(expences)
+
+    //one way is this to get data of that particular user
+    // const expences = await Expence.findAll({where:{id:req.user.id}})
+    // return res.status(200).json(expences)
 }
 
 //adding a expence
 exports.postExpence = async (req, res) => {
+    // console.log(req.user)
     const price = req.body.Expence
     const category = req.body.Cateagory
     const description = req.body.Desc
-    const data = await Expence.create({ price: price, category: category, description: description })
+    const data = await req.user.createExpence({ price: price, category: category, description: description}) //using magic function to add expence
     return res.status(200).json({ data: data })
 }
 
 //delete an expence
 exports.deleteExpence = async (req, res) => {
-    const id = req.params.id
-    await Expence.destroy({ where: { id: id } })
+    const prodId=req.params.id
+    await Expence.destroy({where:{id:prodId}})
     return res.sendStatus(200)
-
 }
 
 //getting specific id data

@@ -5,15 +5,16 @@ const express=require('express')
 const router=express.Router();
 
 const controller=require('../controller/expenceController')
+const  UserAuthentication=require('../path/auth') //for user authentication with token
 
-router.get('/expences',controller.getExpences)
+router.get('/expences',UserAuthentication.Authentication,controller.getExpences)//first user authentication middleware will run if got succes then the expence will shown
 
-router.post('/add-expence',controller.postExpence)
+router.post('/add-expence',UserAuthentication.Authentication,controller.postExpence)
 
-router.delete('/delete/:id',controller.deleteExpence)
+router.delete('/delete/:id',UserAuthentication.Authentication,controller.deleteExpence)
 
-router.get('/edit-expence/:id',controller.editExpence)
+router.get('/edit-expence/:id',UserAuthentication.Authentication,controller.editExpence)
 
-router.put('/update-expence/:id',controller.updateExpence)
+router.put('/update-expence/:id',UserAuthentication.Authentication,controller.updateExpence)
 
 module.exports=router
