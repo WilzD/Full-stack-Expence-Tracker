@@ -1,5 +1,7 @@
 //including models so we can use the Model data
+const { where } = require('sequelize')
 const Expence = require('../models/expence')
+const User=require('../models/user')
 //using return statement because we are sending a promise to the api user
 
 //getting all expences
@@ -7,11 +9,8 @@ exports.getExpences = async (req, res) => {
     //using magic function ti=o get data of that perticular user
      const expences=await req.user.getExpences()// this will give us data of that perticular user only
      const ispremiumuser=req.user.ispremiumuser //to check user is premium or not
-     return res.status(200).json({expences:expences,ispremiumuser:ispremiumuser})
-
-    //one way is this to get data of that particular user
-    // const expences = await Expence.findAll({where:{id:req.user.id}})
-    // return res.status(200).json(expences)
+     const totalexpence=req.user.totalexpence
+     return res.status(200).json({expences:expences,ispremiumuser:ispremiumuser,totalexpence:totalexpence})
 }
 
 //adding a expence
@@ -21,6 +20,8 @@ exports.postExpence = async (req, res) => {
     const category = req.body.Cateagory
     const description = req.body.Desc
     const data = await req.user.createExpence({ price: price, category: category, description: description}) //using magic function to add expence
+    const totalexpence = await Expence.sum('price', { where: { UserId: req.user.id }});
+    await req.user.update({totalexpence:totalexpence})
     return res.status(200).json({ data: data })
 }
 
