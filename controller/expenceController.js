@@ -2,6 +2,7 @@
 const { where } = require('sequelize')
 const Expence = require('../models/expence')
 const User=require('../models/user')
+const sequelize = require('../path/database')
 //using return statement because we are sending a promise to the api user
 
 //getting all expences
@@ -15,21 +16,45 @@ exports.getExpences = async (req, res) => {
 
 //adding a expence
 exports.postExpence = async (req, res) => {
-    // console.log(req.user)
-    const price = req.body.Expence
-    const category = req.body.Cateagory
-    const description = req.body.Desc
-    const data = await req.user.createExpence({ price: price, category: category, description: description}) //using magic function to add expence
-    const totalexpence = await Expence.sum('price', { where: { UserId: req.user.id }});
-    await req.user.update({totalexpence:totalexpence})
-    return res.status(200).json({ data: data })
+    try {
+        let transaction=await sequelize.transaction() // if update fails then the expence will not be stored,always use transaction for all request(other then get)
+        // console.log(req.user)
+        const price = req.body.Expence
+        const category = req.body.Cateagory
+        const description = req.body.Desc
+        const data = await req.user.createExpence({ price: price, category: category, description: description,transaction}) //using magic function to add expence
+        const user=await User.findByPk(req.user.id)
+        const totalexpence=user.totalexpence+ +price
+        // const totalexpence = await Expence.sum('price', { where: { UserId: req.user.id }},{transaction});
+        await req.user.update({totalexpence:totalexpence},{transaction})
+        await transaction.commit()
+        return res.status(200).json({ data: data }) 
+    } catch (error) {
+        console.log(error)
+        await transaction.rollback() //if problem occurs it will not add that expence and rollback
+        return res.status(404).json({message:'problem .adding expence'})
+    }
+
 }
 
 //delete an expence
 exports.deleteExpence = async (req, res) => {
-    const prodId=req.params.id
-    await Expence.destroy({where:{id:prodId}})
-    return res.sendStatus(200)
+    let transaction;
+    try {
+        transaction=await sequelize.transaction()
+        const prodId=req.params.id
+        const expence=await Expence.findByPk(prodId)
+        const totalexpence = await Expence.sum('price', { where: { UserId: req.user.id }},{transaction});
+        await req.user.update({totalexpence:totalexpence-expence.price},{transaction})
+        await Expence.destroy({where:{id:prodId}},{transaction})
+        await transaction.commit()
+        return res.sendStatus(200)
+    } catch (error) {
+        console.log(error)
+        await transaction.rollback()
+        return res.status(404).json({message:'problem .deleting expence'})
+    }
+
 }
 
 //getting specific id data

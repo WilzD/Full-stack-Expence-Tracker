@@ -9,7 +9,6 @@ exports.leaderboard=async(req,res)=>{
         const leaderboard = await User.findAll({
           attributes: ['id', 'name', 'totalexpence'],
           order: [['totalexpence', 'DESC']],
-          limit:15
         });
         return res.status(200).json(leaderboard);
       } catch (error) {
