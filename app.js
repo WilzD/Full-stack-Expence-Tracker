@@ -13,6 +13,18 @@ const cors = require('cors')
 const { where } = require('sequelize')
 app.use(cors())
 
+
+
+
+//////////***************mail */
+
+// implementingendinblue to send mails to user
+const Sib=require('sib-api-v3-sdk') //make and object
+require('dotenv').config() //to include .env
+
+
+
+
 //routes setup
 const expenceRoute=require('./routes/expenceRoute')
 app.use(expenceRoute) 
