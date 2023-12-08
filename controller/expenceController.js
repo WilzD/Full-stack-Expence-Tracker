@@ -1,13 +1,13 @@
 //including models so we can use the Model data
 const Expence = require('../models/expence')
-
 //using return statement because we are sending a promise to the api user
 
 //getting all expences
 exports.getExpences = async (req, res) => {
     //using magic function ti=o get data of that perticular user
      const expences=await req.user.getExpences()// this will give us data of that perticular user only
-     return res.status(200).json(expences)
+     const ispremiumuser=req.user.ispremiumuser //to check user is premium or not
+     return res.status(200).json({expences:expences,ispremiumuser:ispremiumuser})
 
     //one way is this to get data of that particular user
     // const expences = await Expence.findAll({where:{id:req.user.id}})

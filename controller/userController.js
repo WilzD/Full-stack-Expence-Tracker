@@ -4,6 +4,7 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 //for creating token
 const jwt=require('jsonwebtoken')
+const { use } = require('../routes/expenceRoute')
 
 function generateAccessToken(id){
  return jwt.sign({user:id},'5TObIsTmyTGZ40VdVKkloIFgBYyerMybLzl+Ijajbgid+FkZocjgEfDKVgtvVte/')
@@ -41,7 +42,7 @@ exports.postUser = async (req, res) => {
 //finding user and logging in
 exports.getUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body
+        const { name, email, password} = req.body
         if(name===''|| email==='' || password===''){
             return res.status(500).json({message:'either name , email or password is not provided'})
         }
@@ -51,7 +52,7 @@ exports.getUser = async (req, res) => {
             if (data[0].name === name) {
                 bcrypt.compare(password,data[0].password,(err,result)=>{
                     if (result) {
-                        res.status(200).json({ success: true, message: 'user login successfully' ,token:generateAccessToken(data[0].id)})//making token by passing id to the function
+                        res.status(200).json({ success: true, message: 'user login successfully' ,token:generateAccessToken(data[0].id),data})//making token by passing id to the function
                     }
                     else {
                         return res.status(402).json({ success: false, message: "wrong password" })
@@ -69,4 +70,5 @@ exports.getUser = async (req, res) => {
     catch (error) {
        res.status(404).json({ success: false, message: "user not found" })
     }
+
 }

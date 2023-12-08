@@ -23,6 +23,9 @@ app.use(userRoute)
 const orderRoute=require('./routes/purchase')
 app.use(orderRoute)
 
+const premiumRoute=require('./routes/premiumRoute')
+app.use(premiumRoute) 
+
 //making schemas relations
 const Expence = require('./models/expence')
 const User = require('./models/user')
