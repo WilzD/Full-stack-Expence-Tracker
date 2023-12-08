@@ -1,33 +1,26 @@
 
 const Expence = require('../models/expence')
 const User=require('../models/user')
+const sequelize=require('sequelize')
 
+//using left outer join(which by default) to solve the leaderboard
 exports.leaderboard=async(req,res)=>{
     try {
-        const data=await Expence.findAll()
-        const users=await User.findAll()
-        const useraggregatedExpence={}
-        data.forEach((expence) =>{
-            if(useraggregatedExpence[expence.userId]){
-                useraggregatedExpence[expence.userId]=useraggregatedExpence[expence.userId]+expence.price
+        const aggregateExpences=await User.findAll({
+            attributes:['id','name',[sequelize.fn('sum',sequelize.col('expences.price')),'total_cost']],
+            include:[
+            {
+              model:Expence,
+              attributes:[],
             }
-            else{
-                useraggregatedExpence[expence.userId]=expence.price
-            }
-        });
-                    
-        var leaderboardDetails=[]
-        users.forEach((user)=>{
-            leaderboardDetails.push({name:user.name,total_cost:useraggregatedExpence[user.id]
-            || 0})
+        ],
+            group:['user.id'],
+            order:[['total_cost','DESC']] //making descending order on basis of totat_cost which we make by join
         })
-        console.log(leaderboardDetails)
-        leaderboardDetails.sort((a,b)=>b.total_cost-a.total_cost)
-        console.log(leaderboardDetails)
-        res.status(200).json(leaderboardDetails)
-        
+        console.log(aggregateExpences)
+        return res.status(200).json(aggregateExpences)
     } catch (error) {
-        return res.status(404).json({message:'something went wrong'})
+        console.log(error)
+        return res.status(404).json({message:"something went wrong"})
     }
- 
 }
