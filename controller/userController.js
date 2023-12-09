@@ -6,15 +6,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { use } = require('../routes/expenceRoute')
 
-//sendinblue setup to send mails
-const Sib = require('sib-api-v3-sdk')
-
-require('dotenv').config()
-
-const client = Sib.ApiClient.instance
-
-const apiKey = client.authentications['api-key']
-apiKey.apiKey = process.env.API_KEY
 
 
 
@@ -85,43 +76,4 @@ exports.getUser = async (req, res) => {
 
 }
 
-exports.forgotPassword = async (req, res) => {
-    const { name, email, contact } = req.body
-    console.log(name, email, contact)
-    try {
-        const tranEmailApi = new Sib.TransactionalEmailsApi()
 
-        const sender = {
-            email: 'wilsondynamic3@gmail.com',
-            name: 'Expence Tracker Pvt ltd',
-        }
-
-        const receivers = [
-            {
-                email:email,
-            },
-        ]
-       await tranEmailApi
-            .sendTransacEmail({
-                sender,
-                to: receivers,
-                subject: 'Reset your password for Expence Tracker',
-                textContent: `Hello ${name} you have raised a request for reset/change your password`,
-                htmlContent: `<h1>Expence Tracker</h1>
-                Hello ${name} you have raised a request for reset/change your password
-                link to change your password <a>expencetracker/password/resetpassword</a>
-                <h5>regards</h5>
-                <h6>team Expence tracker</h6>`
-                ,
-                params: {
-                    role: 'Regards team Expence Tracker',
-                },
-            })
-        return res.status(200).json({ message: 'Mail has been send' })
-
-    } catch (error) {
-        console.log(error)
-        return res.status(403).json({ success: false, message: 'something went wrong' })
-    }
-
-}

@@ -12,17 +12,9 @@ app.use(bodyParser.json({ extended: false }))
 const cors = require('cors')
 const { where } = require('sequelize')
 app.use(cors())
-
-
-
-
-//////////***************mail */
-
-// implementingendinblue to send mails to user
-const Sib=require('sib-api-v3-sdk') //make and object
-require('dotenv').config() //to include .env
-
-
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+app.use(express.static('public'));
 
 
 //routes setup
@@ -38,16 +30,23 @@ app.use(orderRoute)
 const premiumRoute=require('./routes/premiumRoute')
 app.use(premiumRoute) 
 
+const forgotPasswordROute=require('./routes/forgotPasswordRoute')
+app.use(forgotPasswordROute)
+
 //making schemas relations
 const Expence = require('./models/expence')
 const User = require('./models/user')
 const Order=require('./models/order')
+const ForgotPassword=require('./models/forgotPassword')
 
-User.hasMany(Expence,{constraints:true,onDelete:'CASCADE'})
-Expence.belongsTo(User)
+User.hasMany(Expence)
+Expence.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
 
 User.hasMany(Order)
-Order.belongsTo(User)
+Order.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
+
+User.hasMany(ForgotPassword)
+ForgotPassword.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
 
 //schemas creation during runtime
 sequelizeDB.sync().then(() => {
