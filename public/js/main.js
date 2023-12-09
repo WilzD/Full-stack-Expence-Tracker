@@ -8,6 +8,7 @@ async function Showdata() {
                 if(isPreminum==true){
                     document.getElementById('ispremium').style.display='block'
                     document.getElementById('leaderboard').style.display='block'
+                    document.getElementById('downloaadExpence').style.display='block'
                 }
                 else{
                     document.getElementById('rzp-button1').style.display='block'
@@ -243,3 +244,11 @@ async function forgotPassword(){
 
 }
 
+async function downloadExpence(){
+    const Allexpense=await axios.get(`http://localhost:3000/expences`,{headers:{'Authorization':token}})
+  
+    document.getElementById('download').innerHTML=Allexpense
+    window.location.href = 'downloadExpence.html'
+    
+    
+}
