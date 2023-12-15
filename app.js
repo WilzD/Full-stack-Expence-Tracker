@@ -38,6 +38,7 @@ const Expence = require('./models/expence')
 const User = require('./models/user')
 const Order=require('./models/order')
 const ForgotPassword=require('./models/forgotPassword')
+const Download=require('./models/downloadHistory')
 
 User.hasMany(Expence)
 Expence.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
@@ -47,6 +48,9 @@ Order.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
 
 User.hasMany(ForgotPassword)
 ForgotPassword.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
+
+User.hasMany(Download)
+Download.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
 
 //schemas creation during runtime
 sequelizeDB.sync().then(() => {

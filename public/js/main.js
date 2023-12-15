@@ -9,6 +9,7 @@ async function Showdata() {
                     document.getElementById('ispremium').style.display='block'
                     document.getElementById('leaderboard').style.display='block'
                     document.getElementById('downloaadExpence').style.display='block'
+                    document.getElementById('downloaadHistory').style.display='block'
                 }
                 else{
                     document.getElementById('rzp-button1').style.display='block'
@@ -245,10 +246,39 @@ async function forgotPassword(){
 }
 
 async function downloadExpence(){
-    const Allexpense=await axios.get(`http://localhost:3000/expences`,{headers:{'Authorization':token}})
-  
-    document.getElementById('download').innerHTML=Allexpense
-    window.location.href = 'downloadExpence.html'
-    
+    try {
+        const response=await axios.get(`http://localhost:3000/expences/download`,{headers:{'Authorization':token}})
+        // console.log(response)
+        var a=document.createElement('a')
+        a.href=response.data.fileURL
+        a.download='myexpence.csv'
+        a.click(); 
+
+        msg.innerHTML = `<h2>Download succesfull</h2>`
+        setTimeout(() => {
+            msg.innerHTML = ''
+        }, 2000)
+
+    } catch (error) {
+        let msg = document.getElementById('msg')
+        msg.innerHTML = `<h2>${error.response.data.message}</h2>`
+        setTimeout(() => {
+            msg.innerHTML = ''
+        }, 2000)
+        console.log(error.response.data.message)
+    }
+
     
 }
+
+async function downloadHistory(){
+        const downloadhistory=await axios.get(`http://localhost:3000/expences/download-history`,{headers:{'Authorization':token}})
+        downloadhistory.data.downloadHistory.forEach((element, index) => {
+            html += "<tr>"
+            html += `<td><a href="${element.url}">download</a></td>`
+            html += "</tr>"
+        });
+        document.querySelector('#historyTable tbody').innerHTML = html
+        console.log(downloadhistory.data.downloadHistory)
+     }
+

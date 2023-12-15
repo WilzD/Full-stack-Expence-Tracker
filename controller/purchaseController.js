@@ -1,17 +1,11 @@
 const Razorpay=require('razorpay')
 const Order=require('../models/order')
 
-exports.premiumMembership=async(req,res)=>{
-    // try {
-    //     return res.status(200).json({message:'premium data'}) 
-    // } catch (error) {
-    //     return res.status(404).json({message:'error in premium data'})
-    // }
-   
+exports.premiumMembership=async(req,res)=>{ 
     try {
         var rzp= new Razorpay({
-            key_id:'rzp_test_vg92jGd9gMWajS',
-            key_secret:'QzxmMGpICbmHaaUKWgiinNZQ'
+            key_id:'rzp_test_NQ844u72fokPMf',
+            key_secret:'UNYqHxMhpNDm3W0gQMjoMmgf'
          })
          const amount=9900
          rzp.orders.create({amount,currency:"INR"},async (err,order)=>{

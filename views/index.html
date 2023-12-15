@@ -11,21 +11,40 @@
 
     </tbody>
     <div class="container">
+
       <div id="premium">
         <h1 id="ispremium" style="display: none;" class="card card-body mt-4 ">You are an premimum user</h1>
-        <table class="table" id="leaderTable">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Expence</th>
-            </tr>
-          </thead>
-          <tbody>
-        <button id="leaderboard" class="btn btn-outline-dark btn-lg" style="display: none;" onclick="showLeaderboard()"><i class="fas fa-money-bill"></i>Show Leaderboard</button>
+      <div>
+            <div id="msg" style="color: red; text-align: center;">
+              <!-- for error msg -->
+          </div>
+        <button id="leaderboard" class="btn btn-outline-dark btn-lg" style="display: none;" onclick="showLeaderboard()"><i class="fas fa-money-bill"></i>Show Leaderboard</button><br>
+        <div>
+          <table class="table" id="leaderTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Expence</th>
+              </tr>
+            </thead>
+            <tbody>
+        </div>
+        <button id="downloaadExpence" class="btn btn-outline-dark btn-lg" style="display: none;" onclick="downloadExpence()"><i class="fas fa-money-bill"></i>Download Expences</button><br>
+        <button id="downloaadHistory" class="btn btn-outline-dark btn-lg" style="display: none;" onclick="downloadHistory()"><i class="fas fa-money-bill"></i>Your Downloads</button>
+        <div>
+          <table class="table" id="historyTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+        </div>
+     </div>
         <button id="rzp-button1" class="btn btn-outline-dark btn-lg" style="display: none;"><i class="fas fa-money-bill"></i>Buy Premium</button>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </div>
-        <div class="card card-body">
+        <div class="card card-body mt-5">
             <div class="header">
                 <h1>Expence Tracker</h1>
             </div>
