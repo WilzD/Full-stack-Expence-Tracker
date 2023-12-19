@@ -8,16 +8,13 @@
     <title> API Expence Tracker</title>
 </head>
 <body>
-
-    </tbody>
     <div class="container">
-
       <div id="premium">
         <h1 id="ispremium" style="display: none;" class="card card-body mt-4 ">You are an premimum user</h1>
-      <div>
+      </div>
             <div id="msg" style="color: red; text-align: center;">
               <!-- for error msg -->
-          </div>
+            </div>
         <button id="leaderboard" class="btn btn-outline-dark btn-lg" style="display: none;" onclick="showLeaderboard()"><i class="fas fa-money-bill"></i>Show Leaderboard</button><br>
         <div>
           <table class="table" id="leaderTable">
@@ -64,9 +61,16 @@
             <button id="UpdateBtn" type="submit" class="mt-4" style="display: none;"> Update Expence</button>
           </div>
         </div>
-</div>
         <div class="card card-body mt-4 ">
             <table class="table" id="crudTable">
+              <Label>Rows Per Page : </Label>
+              <select name="" id="RowsLimit" style="margin:10px;">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="ALL">ALL</option>
+              </select>
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -79,7 +83,10 @@
                 <tbody>
 
                 </tbody>
+            </table>
         </div>
+    <div id="pagination">
+      <!-- here button will be add for previos next page -->
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>

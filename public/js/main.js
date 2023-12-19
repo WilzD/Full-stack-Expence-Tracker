@@ -1,11 +1,50 @@
 
 const token=localStorage.getItem('token')
-async function Showdata() {
+
+//saving the selected number of rows of user in LS
+document.getElementById('RowsLimit').onclick=()=>{
+    const rowlist=document.getElementById('RowsLimit').value
+    localStorage.setItem('rowsPerPage',rowlist)
+    
+}
+window.addEventListener("DOMContentLoaded",async()=>{
+    const page=1
+    let  rowlist=localStorage.getItem('rowsPerPage')
+    document.getElementById('RowsLimit').value=rowlist
+    const response= await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`,{headers:{'Authorization':token}})// passing in headers so that it will not seen in url
+    ShowExpences(response.data.expences,response.data.ispremiumuser)
+    ShowPagination(response.data.currentPage,response.data.hasNextPage,response.data.nextPage,response.data.hasPreviousPage,response.data.previousPage)
+})
+
+function ShowPagination(currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage){
+   let pagination=document.getElementById('pagination')
+   pagination.innerHTML=''
+   
+   if(hasNextPage){
+    const btn3=document.createElement('button')
+    btn3.innerHTML=nextPage
+    btn3.addEventListener('click',()=>getExpences(nextPage))
+    pagination.appendChild(btn3)
+   }
+
+   const btn1=document.createElement('button')
+   btn1.innerHTML=currentPage
+   btn1.addEventListener('click',()=>getExpences(currentPage))
+   pagination.appendChild(btn1)
+
+   if(hasPreviousPage){
+    const btn2=document.createElement('button')
+    btn2.innerHTML=previousPage
+    btn2.addEventListener('click',()=>getExpences(previousPage))
+    pagination.appendChild(btn2)
+   }
+
+
+
+}
+async function ShowExpences(expenceList,isPremium) {
     try {
-        const response = await axios.get(`http://localhost:3000/expences`,{headers:{'Authorization':token}})//passing token so that specific user's data will be shown
-        console.log(response)
-        let isPreminum=response.data.ispremiumuser
-                if(isPreminum==true){
+                if(isPremium==true){
                     document.getElementById('ispremium').style.display='block'
                     document.getElementById('leaderboard').style.display='block'
                     document.getElementById('downloaadExpence').style.display='block'
@@ -14,11 +53,11 @@ async function Showdata() {
                 else{
                     document.getElementById('rzp-button1').style.display='block'
                 }
-        //generate some id                                                                                 // passing in headers so that it will not seen in url
+        //generate some id                                                                           
         let idCode = "ET"
         let idNum = 202300
         let html = ''
-        response.data.expences.forEach((element, index) => {
+        expenceList.forEach((element) => {
             html += "<tr>"
             html += `<td>${idCode}${++idNum}</td>`
             html += `<td>${element.price}</td>`
@@ -34,9 +73,12 @@ async function Showdata() {
         console.log(error)
     }
 }
-// load date when refresh
-document.onload = Showdata()
-
+async function getExpences(page){
+    let  rowlist=localStorage.getItem('rowsPerPage')
+    const response= await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`,{headers:{'Authorization':token}})// passing in headers so that it will not seen in url
+    ShowExpences(response.data.expences,response.data.ispremiumuser)
+    ShowPagination(response.data.currentPage,response.data.hasNextPage,response.data.nextPage,response.data.hasPreviousPage,response.data.previousPage)
+}
 
 function AddExpence() {
     let btn = document.getElementById('AddBtn')
@@ -176,9 +218,9 @@ async function loginUser() {
 }
 
 async function premiummembership(){
-    console.log(token)
+    // console.log(token)
     const response=await axios.get('http://localhost:3000/purchase/premiummembership',{headers:{'Authorization':token}})
-    console.log(response)
+    // console.log(response)
     var options = {
      "key":response.data.key_id,
      "order_id":response.data.order.id,

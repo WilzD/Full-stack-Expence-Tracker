@@ -1,5 +1,4 @@
 //including models so we can use the Model data
-const { where } = require('sequelize')
 const Expence = require('../models/expence')
 const User=require('../models/user')
 const sequelize = require('../path/database')
@@ -7,11 +6,29 @@ const sequelize = require('../path/database')
 
 //getting all expences
 exports.getExpences = async (req, res) => {
+    const page=+req.query.page
+    const ITEMS_PER_PAGE=+req.query.rowlist
+    console.log(page,ITEMS_PER_PAGE)
+
     //using magic function ti=o get data of that perticular user
-     const expences=await req.user.getExpences()// this will give us data of that perticular user only
+    const totalRows=await req.user.getExpences()
+    console.log(totalRows.length)
+     const expences=await req.user.getExpences({
+        offset:(page-1)*ITEMS_PER_PAGE,
+        limit:ITEMS_PER_PAGE
+     })// this will give us data of that perticular user only
+     console.log(expences.length)
      const ispremiumuser=req.user.ispremiumuser //to check user is premium or not
      const totalexpence=req.user.totalexpence
-     return res.status(200).json({expences:expences,ispremiumuser:ispremiumuser,totalexpence:totalexpence})
+     return res.status(200).json({
+        expences:expences,ispremiumuser:ispremiumuser,totalexpence:totalexpence,
+        currentPage:page,
+        hasNextPage:ITEMS_PER_PAGE*page<totalRows.length,
+        nextPage:page+1,
+        hasPreviousPage:page>1,
+        previousPage:page-1,
+        lastPage:Math.ceil(totalRows.length/ITEMS_PER_PAGE)
+    })
 }
 
 //adding a expence
