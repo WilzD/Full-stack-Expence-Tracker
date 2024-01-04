@@ -7,9 +7,9 @@ const router=express.Router();
 const ForgotPasswordController=require('../controller/forgotPasswordController')
 
 
-router.post('/password/forgotpassword',ForgotPasswordController.forgotPasswordMail)//isme bhejo mail
-
 router.get('/password/resetpassword/:id',ForgotPasswordController.ForgotPasswordLink)//or yaha bhejo reset password ka form
+
+router.post('/password/forgotpassword',ForgotPasswordController.forgotPasswordMail)//isme bhejo mail
 
 router.post('/password/updatepassword/:id',ForgotPasswordController.resetpassword)
 

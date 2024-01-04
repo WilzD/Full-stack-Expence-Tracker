@@ -42,7 +42,6 @@ exports.postExpence = async (req, res) => {
         const data = await req.user.createExpence({ price: price, category: category, description: description,transaction}) //using magic function to add expence
         const user=await User.findByPk(req.user.id)
         const totalexpence=user.totalexpence+ +price
-        // const totalexpence = await Expence.sum('price', { where: { UserId: req.user.id }},{transaction});
         await req.user.update({totalexpence:totalexpence},{transaction})
         await transaction.commit()
         return res.status(200).json({ data: data }) 
@@ -82,7 +81,6 @@ exports.editExpence = async (req, res) => {
 
 //updating the data
 exports.updateExpence = async (req, res) => {
-    console.log(req.params.id)
     const updatedPrice = req.body.Expence
     const updatedCategory = req.body.Cateagory
     const updatedDesc = req.body.Desc
@@ -92,5 +90,5 @@ exports.updateExpence = async (req, res) => {
         updatedUser.category = updatedCategory,
         updatedUser.description = updatedDesc,
         updatedUser.save()
-    return res.sendStatus(200)
+        return res.status(201).json(updatedUser)
 }

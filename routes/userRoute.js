@@ -8,6 +8,5 @@ const controller=require('../controller/userController')
 
 
 router.post('/user',controller.postUser)
-router.post('/user-login',controller.getUser) 
-
+router.post('/user-login',controller.getUser)
 module.exports=router

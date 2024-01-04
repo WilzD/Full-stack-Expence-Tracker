@@ -2,8 +2,11 @@
 const Sequelize=require('sequelize')
 
 //creating a new sequelize object
-const sequelize= new Sequelize('expencetrackerdb','root','123456',{
+const db=process.env.DATABASE_NAME
+const username=process.env.USER_NAME
+const password=process.env.PASSWORD
+const sequelize= new Sequelize(db,username,password,{
 dialect:'mysql',
-host:'localhost'
+host:process.env.DB_HOST
 })
 module.exports=sequelize

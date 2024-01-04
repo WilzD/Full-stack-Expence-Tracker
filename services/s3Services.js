@@ -20,7 +20,6 @@ const AWS=require('aws-sdk')
             reject (err)
           }
           else{
-            // console.log('success',success)
             resolve(success.Location)// upload returns us an object we call it as success and success.location has that exact url which we have to return to download function
           }
        })

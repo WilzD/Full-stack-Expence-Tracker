@@ -10,34 +10,36 @@ const { use } = require('../routes/expenceRoute')
 
 
 function generateAccessToken(id) {
-    return jwt.sign({ user: id }, '5TObIsTmyTGZ40VdVKkloIFgBYyerMybLzl+Ijajbgid+FkZocjgEfDKVgtvVte/')
+    return jwt.sign({ user: id },process.env.JWT_ACCESS_TOKEN)
 }
 //adding a user
 exports.postUser = async (req, res) => {
+    const { name, email, password } = req.body
     try {
-        const { name, email, password } = req.body
         if (name !== '') {
             if (email !== '') {
                 if (password !== '') {
+                    const existUser = await User.findAll({ where: { email: email } })
+                    if (existUser.length>0) {
+                        throw new error('this email is is already registered')
+                    }
                     const saltround = 10 //salt generate a random string and we are adding its cost to 10 so that password will be more uniquly hashed
                     bcrypt.hash(password, saltround, async (err, hash) => {
                         await User.create({ name: name, email: email, password: hash })//now password stored in DB will be that hash string
                         return res.status(201).json({ message: 'Successfully Created New User' })
                     })
                 } else {
-                    return res.status(401).json({ message: "Bad Parameter . password can't be empty" })
+                    return res.status(401).json({ message: "password can't be empty" })
                 }
             } else {
-                return res.status(402).json({ message: "Bad Parameter . email can't be empty or this email is already registered " })
+                return res.status(402).json({ message: "email can't be empty" })
             }
         } else {
-            return res.status(403).json({ message: "Bad Parameter . name can't be empty" })
+            return res.status(403).json({ message: "name can't be empty" })
         }
-
-
     }
     catch (error) {
-        return res.status(500).json({ message: 'bad request' })
+        return res.status(400).json({ message:'this email is already registered. try with different email id'})
     }
 
 }
@@ -75,5 +77,6 @@ exports.getUser = async (req, res) => {
     }
 
 }
+
 
 

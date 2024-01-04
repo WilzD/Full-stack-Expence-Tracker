@@ -21,7 +21,6 @@ exports.leaderboard=async(req,res)=>{
 exports.DownloadAllexpences=async(req,res)=>{
   try {
     const expences=await UserServices.getExpences(req)
-    // console.log(expences)
     const stringFieldExpences=JSON.stringify(expences)
     const filename=`Expence.txt${req.user.id}/${new Date()}` // so that file should have unique name always
     const fileURL=await S3Services.uploadToS3(stringFieldExpences,filename) // this function returns us an promise which has url of txt file
