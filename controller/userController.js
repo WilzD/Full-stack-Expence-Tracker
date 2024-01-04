@@ -6,11 +6,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { use } = require('../routes/expenceRoute')
 
-
-
-
 function generateAccessToken(id) {
-    return jwt.sign({ user: id },process.env.JWT_ACCESS_TOKEN)
+    return jwt.sign({ user: id },'5TObIsTmyTGZ40VdVKkloIFgBYyerMybLzl+Ijajbgid+FkZocjgEfDKVgtvVte/')
 }
 //adding a user
 exports.postUser = async (req, res) => {

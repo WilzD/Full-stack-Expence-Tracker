@@ -200,7 +200,6 @@ async function premiummembership() {
 
     });
     document.getElementById('rzp-button1').onclick = function (e) {
-        console.log('hellos')
         rzp1.open();
         e.preventDefault();
     }

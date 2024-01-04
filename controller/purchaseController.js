@@ -1,11 +1,11 @@
 const Razorpay=require('razorpay')
 const Order=require('../models/order')
 
-exports.premiumMembership=async(req,res)=>{ 
+exports.premiumMembership=async(req,res)=>{
     try {
         var rzp= new Razorpay({
-            key_id:process.env.RZP_KEY_ID ,
-            key_secret:process.env.RZP_KEY_SECRET ,
+            key_id:process.env.RZP_KEY_ID,
+            key_secret:  process.env.RZP_KEY_SECRET,
          })
          const amount=9900
          rzp.orders.create({amount,currency:"INR"},async (err,order)=>{
