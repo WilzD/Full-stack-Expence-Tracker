@@ -1,8 +1,9 @@
 const AWS=require('aws-sdk')
+
  exports.uploadToS3=async(data,filename)=>{
-    const BUCKET_NAME='wilsonexpencetracker'
-    const IAM_USER_KEY='AKIAXLC5DQKFYW36IVGT' //like username
-    const IAM_USER_SECRET='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' //like user password
+    const BUCKET_NAME=process.env.BUCKET_NAME
+    const IAM_USER_KEY=process.env.IAM_USER_KEY//like username
+    const IAM_USER_SECRET=process.env.IAM_USER_SECRET//like user password
      let s3bucket=new AWS.S3({
           accessKeyId:IAM_USER_KEY,
           secretAccessKey:IAM_USER_SECRET
