@@ -1,6 +1,12 @@
 const express = require('express')
 const app = express()
 
+//always put dotenv before database execution
+require('dotenv').config()
+
+//helmet security
+const helmet=require('helmet')
+
 //database setup
 const sequelizeDB = require('./path/database')
 
@@ -12,6 +18,8 @@ app.use(bodyParser.json({ extended: false }))
 const cors = require('cors')
 const { where } = require('sequelize')
 app.use(cors())
+ 
+//for using public files
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(express.static('public'));
@@ -32,6 +40,9 @@ app.use(premiumRoute)
 
 const forgotPasswordROute=require('./routes/forgotPasswordRoute')
 app.use(forgotPasswordROute)
+
+//using helmet after all routing setup
+app.use(helmet())
 
 //making schemas relations
 const Expence = require('./models/expence')
