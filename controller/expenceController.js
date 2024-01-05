@@ -8,16 +8,13 @@ const sequelize = require('../path/database')
 exports.getExpences = async (req, res) => {
     const page=+req.query.page
     const ITEMS_PER_PAGE=+req.query.rowlist
-    console.log(page,ITEMS_PER_PAGE)
 
     //using magic function ti=o get data of that perticular user
     const totalRows=await req.user.getExpences()
-    console.log(totalRows.length)
      const expences=await req.user.getExpences({
         offset:(page-1)*ITEMS_PER_PAGE,
         limit:ITEMS_PER_PAGE
      })// this will give us data of that perticular user only
-     console.log(expences.length)
      const ispremiumuser=req.user.ispremiumuser //to check user is premium or not
      const totalexpence=req.user.totalexpence
      return res.status(200).json({
@@ -35,7 +32,6 @@ exports.getExpences = async (req, res) => {
 exports.postExpence = async (req, res) => {
     try {
         let transaction=await sequelize.transaction() // if update fails then the expence will not be stored,always use transaction for all request(other then get)
-        // console.log(req.user)
         const price = req.body.Expence
         const category = req.body.Cateagory
         const description = req.body.Desc
@@ -46,7 +42,6 @@ exports.postExpence = async (req, res) => {
         await transaction.commit()
         return res.status(200).json({ data: data }) 
     } catch (error) {
-        console.log(error)
         await transaction.rollback() //if problem occurs it will not add that expence and rollback
         return res.status(404).json({message:'problem .adding expence'})
     }
@@ -66,7 +61,6 @@ exports.deleteExpence = async (req, res) => {
         await transaction.commit()
         return res.sendStatus(200)
     } catch (error) {
-        console.log(error)
         await transaction.rollback()
         return res.status(404).json({message:'problem .deleting expence'})
     }

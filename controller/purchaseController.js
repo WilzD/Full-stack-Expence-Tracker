@@ -16,7 +16,6 @@ exports.premiumMembership=async(req,res)=>{
             return res.status(201).json({order,key_id:rzp.key_id})
          })
     } catch (error) {
-        console.log(error)
         return res.status(404).json({message:'something went wrong'})
     }
 
@@ -38,7 +37,6 @@ exports.updateTrasactionStatus=async(req,res)=>{
         ])
         res.status(202).json({ success: true, message: "Thank youfor being a premium user" });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ success: false, message: "Error updating transaction" });
     }
 }

@@ -34,7 +34,6 @@
   
   #navbar {
     --navbar-height: 64px;
-    /* position:static; */
     height: var(--navbar-height);
     background-color: var(--navbar-bg-color);
     left: 0;
@@ -70,7 +69,6 @@
   
   .navbar-link:focus,
   .navbar-link:hover {
-    /* background-color:#003366; */
     color: white;
     background:-webkit-linear-gradient(left,#003366,#004080,#0059b3
     , #0073e6);
