@@ -35,7 +35,7 @@ async function loginUser(e) {
           email: email,
           password: password
       }
-      let data = await axios.post('http://localhost:3000/user-login', obj)
+      let data = await axios.post('/user-login', obj)
       // ************storing token to local storage*/
       localStorage.setItem('token',data.data.token)
       window.location.href = `/index`;
@@ -63,7 +63,7 @@ async function addUser(e) {
           email: email,
           password: password
       }
-      const data = await axios.post('http://localhost:3000/user', obj)
+      const data = await axios.post('/user', obj)
       
       signUpError.innerHTML = `<span>${obj.name} you are in !!! redirecting you to login page</span>`
       signUpError.style.color='green'
@@ -88,8 +88,9 @@ async function forgotPassword(event) {
       const obj = {
            email
       }
-      const data = await axios.post(`http://localhost:3000/password/forgotpassword`, obj)
+      const data = await axios.post(`/password/forgotpassword`, obj)
       forgotPasswordError.innerHTML = `<span>${data.data.message}</span>`
+      forgotPasswordError.style.color='green'
       setTimeout(() => {
           forgotPasswordError.innerHTML = ''
           window.location.href = "/";
