@@ -74,8 +74,9 @@ User.hasMany(Download)
 Download.belongsTo(User,{constraints:true,onDelete:'CASCADE'})
 
 //schemas creation during runtime
+const port=process.env.PORT
 sequelizeDB.sync().then(() => {
-    app.listen(3000)
+    app.listen(port)
 }).catch(err => console.log(err))
 
 

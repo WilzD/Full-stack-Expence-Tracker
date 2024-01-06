@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const page = 1
     let rowlist = localStorage.getItem('rowsPerPage')
     document.getElementById('RowsLimit').value = rowlist
-    const response = await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
+    const response = await axios.get(`/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
     ShowExpences(response.data.expences, response.data.ispremiumuser)
     ShowPagination(response.data.currentPage, response.data.hasNextPage, response.data.nextPage, response.data.hasPreviousPage, response.data.previousPage)
 })
@@ -24,7 +24,7 @@ async function setRowlistValue() {
         const page = 1
         let rowlist = localStorage.getItem('rowsPerPage')
         document.getElementById('RowsLimit').value = rowlist
-        const response = await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
+        const response = await axios.get(`/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
         ShowExpences(response.data.expences, response.data.ispremiumuser)
         ShowPagination(response.data.currentPage, response.data.hasNextPage, response.data.nextPage, response.data.hasPreviousPage, response.data.previousPage)
     }
@@ -92,7 +92,7 @@ async function ShowExpences(expenceList, isPremium) {
 }
 async function getExpences(page) {
     let rowlist = localStorage.getItem('rowsPerPage')
-    const response = await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
+    const response = await axios.get(`/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
     ShowExpences(response.data.expences, response.data.ispremiumuser)
     ShowPagination(response.data.currentPage, response.data.hasNextPage, response.data.nextPage, response.data.hasPreviousPage, response.data.previousPage)
 }
@@ -110,7 +110,7 @@ function AddExpence() {
                 Cateagory,
                 Desc
             }
-            await axios.post('http://localhost:3000/add-expence', obj, { headers: { 'Authorization': token } })
+            await axios.post('/add-expence', obj, { headers: { 'Authorization': token } })
             document.querySelector('#Price').value = ""
             document.querySelector('#desc').value = ""
             let page = localStorage.getItem('currentPage')
@@ -127,7 +127,7 @@ async function EditExpence(id) {
         //add bitton will hide and update button display
         document.getElementById('UpdateBtn').style.display = 'block'
         document.getElementById('AddBtn').style.display = 'none'
-        const response = await axios.get(`http://localhost:3000/edit-expence/${id}`, { headers: { 'Authorization': token } })
+        const response = await axios.get(`/edit-expence/${id}`, { headers: { 'Authorization': token } })
         
         document.querySelector('#Price').value = response.data.price
         document.querySelector('select').value = response.data.category
@@ -136,7 +136,7 @@ async function EditExpence(id) {
 
             //here we are using put method because patch method is showing error , and our web is working very fine with put method
             document.getElementById('UpdateBtn').onclick = async () => {
-                await axios.put(`http://localhost:3000/update-expence/${id}`, {
+                await axios.put(`/update-expence/${id}`, {
                     Expence: document.querySelector('#Price').value,
                     Cateagory: document.querySelector('select').value,
                     Desc: document.querySelector('#desc').value
@@ -163,7 +163,7 @@ async function EditExpence(id) {
 
 async function DeleteExpence(id) {
     try {
-        await axios.delete(`http://localhost:3000/delete/${id}`, { headers: { 'Authorization': token } })
+        await axios.delete(`/delete/${id}`, { headers: { 'Authorization': token } })
         let page = localStorage.getItem('currentPage')
         getExpences(page)
     } catch (error) {
@@ -172,13 +172,13 @@ async function DeleteExpence(id) {
 }
 
 async function premiummembership() {
-    const response = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { 'Authorization': token } })
+    const response = await axios.get('/purchase/premiummembership', { headers: { 'Authorization': token } })
     var options = {
         "key": response.data.key_id,
         "order_id": response.data.order.id,
         "description": "Wilson Test",
         "handler": async function (response) {
-            await axios.post("http://localhost:3000/purchase/updatepremiummembership", {
+            await axios.post("/purchase/updatepremiummembership", {
                 order_id: response.razorpay_order_id,
                 payment_id: response.razorpay_payment_id
             }, { headers: { 'Authorization': token } });
@@ -214,7 +214,7 @@ async function showLeaderboard() {
     dashboard.style.display = 'none'
     historySection.style.display = 'none'
 
-    const leaderboard = await axios.get('http://localhost:3000/purchase/premiumuser/leaderboard', { headers: { 'Authorization': token } })
+    const leaderboard = await axios.get('/purchase/premiumuser/leaderboard', { headers: { 'Authorization': token } })
    
     let html = ''
     let num = 0
@@ -231,7 +231,7 @@ async function showLeaderboard() {
 
 async function downloadExpence() {
     try {
-        const response = await axios.get(`http://localhost:3000/expences/download`, { headers: { 'Authorization': token } })
+        const response = await axios.get(`/expences/download`, { headers: { 'Authorization': token } })
         // console.log(response)
         var a = document.createElement('a')
         a.href = response.data.fileURL
@@ -265,7 +265,7 @@ async function downloadHistory() {
     dashboard.style.display = 'none'
     leaderBoard.style.display = 'none'
 
-    const downloadhistory = await axios.get(`http://localhost:3000/expences/download-history`, { headers: { 'Authorization': token } })
+    const downloadhistory = await axios.get(`/expences/download-history`, { headers: { 'Authorization': token } })
     let html = ''
     let num = 0
     downloadhistory.data.downloadHistory.forEach((element, index) => {
