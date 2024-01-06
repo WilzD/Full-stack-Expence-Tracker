@@ -65,7 +65,6 @@ exports.forgotPasswordMail = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error)
         return res.status(403).json({ success: false, message: 'something went wrong' })
     }
 
@@ -86,9 +85,7 @@ exports.ForgotPasswordLink = async (req, res) => {
            <button>reset password</button>
        </form>
     </html>`)
-    res.end()
-        console.log('form of reset password with link send to user')
-        
+    res.end()        
     } catch (error) {
         res.status(404).json({message: "user not found"})
     }
@@ -99,14 +96,11 @@ exports.resetpassword = async (request, response, next) => {
     try {
         const newpassword = request.body.newpassword;
         const id=request.params.id
-        console.log('new password',newpassword,'user id that is in forgot table',id)
         const passwordreset = await ForgotPassword.findByPk(id);
-        console.log('link active',passwordreset.active)
         const currentTime = new Date();
         const createdAtTime = new Date(passwordreset.createdAt);
         const timeDifference = currentTime - createdAtTime;
         const timeLimit = 5 * 60 * 1000; 
-        console.log(timeDifference,timeLimit)
         if(timeDifference <= timeLimit && passwordreset.active==true ){
             passwordreset.update({ active: false })
             const hashedPassword = await bcrypt.hash(newpassword, 10);
@@ -120,11 +114,9 @@ exports.resetpassword = async (request, response, next) => {
             );
             response.status(200).json('Password reset successful.');
         }else{
-            console.log('false')
             response.status(403).json( "Link is expired");
         }
     } catch (error) {
-        console.error("Error resetting password:", error);
         response.status(500).json({ message: "Internal server error" });
     }
 }

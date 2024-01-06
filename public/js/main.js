@@ -1,5 +1,12 @@
+//elements
+const historySection=document.getElementById('historySection')
+const form=document.getElementById('form')
+const dashboard=document.getElementById('dashboard')
+const leaderBoard=document.getElementById('leaderBoard')
 
+//token using for authentication
 const token = localStorage.getItem('token')
+
 //as soon as the user login this will run
 window.addEventListener("DOMContentLoaded", async () => {
     const page = 1
@@ -121,7 +128,7 @@ async function EditExpence(id) {
         document.getElementById('UpdateBtn').style.display = 'block'
         document.getElementById('AddBtn').style.display = 'none'
         const response = await axios.get(`http://localhost:3000/edit-expence/${id}`, { headers: { 'Authorization': token } })
-        console.log(response)
+        
         document.querySelector('#Price').value = response.data.price
         document.querySelector('select').value = response.data.category
         document.querySelector('#desc').value = response.data.description
@@ -129,25 +136,18 @@ async function EditExpence(id) {
 
             //here we are using put method because patch method is showing error , and our web is working very fine with put method
             document.getElementById('UpdateBtn').onclick = async () => {
-                // console.log( document.querySelector('#Price').value,document.querySelector('select').value,document.querySelector('#desc').value)
                 await axios.put(`http://localhost:3000/update-expence/${id}`, {
                     Expence: document.querySelector('#Price').value,
                     Cateagory: document.querySelector('select').value,
                     Desc: document.querySelector('#desc').value
                 }, { headers: { 'Authorization': token } })
-                //add bitton will hide and update button display
-                // console.log(response)
 
-                // let  rowlist=localStorage.getItem('rowsPerPage')
                 let page = localStorage.getItem('currentPage')
                 getExpences(page)
                 document.querySelector('#Price').value = ''
                 document.querySelector('#desc').value = ''
                 document.getElementById('UpdateBtn').style.display = 'none'
                 document.getElementById('AddBtn').style.display = 'block'
-                // const response= await axios.get(`http://localhost:3000/expences?page=${page}&rowlist=${rowlist}`,{headers:{'Authorization':token}})// passing in headers so that it will not seen in url
-                // ShowExpences(response.data.expences,response.data.ispremiumuser)
-                // ShowPagination(response.data.currentPage,response.data.hasNextPage,response.data.nextPage,response.data.hasPreviousPage,response.data.previousPage)
             }
 
         } catch (error) {
@@ -172,9 +172,7 @@ async function DeleteExpence(id) {
 }
 
 async function premiummembership() {
-    // console.log(token)
     const response = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { 'Authorization': token } })
-    // console.log(response)
     var options = {
         "key": response.data.key_id,
         "order_id": response.data.order.id,
@@ -190,6 +188,8 @@ async function premiummembership() {
             setTimeout(() => {
                 msg.innerHTML = ''
                 getExpences(1)
+                document.getElementById('rzp-button1').style.display = 'none'
+
             }, 2000)
         },
     }
@@ -209,13 +209,13 @@ premiummembership()
 
 async function showLeaderboard() {
 
-    document.getElementById('leaderBoard').style.display = 'block'
-    document.getElementById('form').style.display = 'none'
-    document.getElementById('dashboard').style.display = 'none'
-    document.getElementById('historySection').style.display = 'none'
+    leaderBoard.style.display = 'block'
+    form.style.display = 'none'
+    dashboard.style.display = 'none'
+    historySection.style.display = 'none'
 
     const leaderboard = await axios.get('http://localhost:3000/purchase/premiumuser/leaderboard', { headers: { 'Authorization': token } })
-    // console.log(leaderboard)
+   
     let html = ''
     let num = 0
     leaderboard.data.forEach((element) => {
@@ -259,15 +259,13 @@ async function downloadExpence() {
 }
 
 async function downloadHistory() {
-    document.getElementById('historySection').style.display = 'block'
-    document.getElementById('form').style.display = 'none'
-    document.getElementById('dashboard').style.display = 'none'
-    document.getElementById('leaderBoard').style.display = 'none'
 
-    
+    historySection.style.display = 'block'
+    form.style.display = 'none'
+    dashboard.style.display = 'none'
+    leaderBoard.style.display = 'none'
 
     const downloadhistory = await axios.get(`http://localhost:3000/expences/download-history`, { headers: { 'Authorization': token } })
-    console.log(downloadhistory)
     let html = ''
     let num = 0
     downloadhistory.data.downloadHistory.forEach((element, index) => {
@@ -278,6 +276,5 @@ async function downloadHistory() {
         html += "</tr>"
     });
     document.querySelector('#historyTable tbody').innerHTML = html
-    console.log(downloadhistory.data.downloadHistory)
 }
 

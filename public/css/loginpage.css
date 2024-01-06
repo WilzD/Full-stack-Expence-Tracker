@@ -184,7 +184,7 @@ form .btn input[type="submit"]{
   cursor: pointer;
 }
 
-#error span,#signup-error span{
+#error span{
   color:red
 }
 .meri-nav{

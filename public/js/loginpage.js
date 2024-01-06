@@ -4,7 +4,10 @@ const loginBtn = document.querySelector("label.login");
 const signupBtn = document.querySelector("label.signup");
 const signupLink = document.querySelector("form .signup-link a");
 
-// const token=localStorage.getItem('token')
+//for msg printing
+const loginError=document.getElementById('error')
+const signUpError=document.getElementById('signup-error')
+const forgotPasswordError = document.getElementById('forgot-msg')
 
 signupBtn.onclick = (()=>{
   loginForm.style.marginLeft = "-50%";
@@ -32,18 +35,14 @@ async function loginUser(e) {
           email: email,
           password: password
       }
-      console.log(obj)
       let data = await axios.post('http://localhost:3000/user-login', obj)
       // ************storing token to local storage*/
       localStorage.setItem('token',data.data.token)
-      window.location.href = "index.html";
+      window.location.href = `/index`;
       localStorage.setItem('rowsPerPage',2)
   }
   catch (error) {
-      console.log(error)
-      console.log(error.response.data.message)
-      let msg = document.getElementById('error')
-      msg.innerHTML = `<span>${error.response.data.message}!!!</span>`
+      loginError.innerHTML = `<span>${error.response.data.message}!!!</span>`
       setTimeout(() => {
           msg.innerHTML = ''
       }, 2000)
@@ -65,17 +64,18 @@ async function addUser(e) {
           password: password
       }
       const data = await axios.post('http://localhost:3000/user', obj)
-      console.log(data)
+      
+      signUpError.innerHTML = `<span>${obj.name} you are in !!! redirecting you to login page</span>`
+      signUpError.style.color='green'
       setTimeout(() => {
-          window.location.href = "login.html";
+          signUpError.innerHTML = ``
+          window.location.href = "/";
       }, 2000)
   } catch (error) {
-    console.log(error)
-    console.log(error.response.data.message)
-    let msg = document.getElementById('signup-error')
-    msg.innerHTML = `<span>${error.response.data.message}!!!</span>`
+    signUpError.innerHTML = `<span>${error.response.data.message}!!!</span>`
+    signUpError.style.color='red'
     setTimeout(() => {
-        msg.innerHTML = ''
+      signUpError.innerHTML = ''
     }, 2000)
 
   }
@@ -84,36 +84,29 @@ async function addUser(e) {
 async function forgotPassword(event) {
   event.preventDefault()
   try {
-      // const name = document.getElementById('name').value
       const email = document.getElementById('email').value
-      // const contact = document.getElementById('contact').value
       const obj = {
            email
       }
       const data = await axios.post(`http://localhost:3000/password/forgotpassword`, obj)
-     
-      let msg = document.getElementById('forgot-msg')
-      msg.style.color='green'
-      msg.innerHTML = `<span>${data.data.message}</span>`
+      forgotPasswordError.innerHTML = `<span>${data.data.message}</span>`
       setTimeout(() => {
-          window.location.href = "login.html";
-          msg.innerHTML = ''
-          
-      }, 3000)
+          forgotPasswordError.innerHTML = ''
+          window.location.href = "/";
+      }, 2000)
 
   } catch (error) {
-      console.log(error)
-      let msg = document.getElementById('forgot-msg')
-      msg.style.color='red'
-      msg.innerHTML = `<span>${error.response.data.message}!!!</span>`
+    forgotPasswordError.style.color='red'
+    forgotPasswordError.innerHTML = `<span>${error.response.data.message}!!!</span>`
       setTimeout(() => {
-        msg.innerHTML =''
+        forgotPasswordError.innerHTML =''
       }, 2000)
   }
 }
 
+
 function logout(event) {
   event.preventDefault();
   localStorage.removeItem('token')
-  window.location.href = "login.html";
+  window.location.href = "/";
 }
