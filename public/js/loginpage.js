@@ -42,7 +42,7 @@ async function loginUser(e) {
       localStorage.setItem('rowsPerPage',2)
   }
   catch (error) {
-      loginError.innerHTML = `<span>${error.response.data.message}!!!</span>`
+      loginError.innerHTML=`<span>${error.response.data.message}!!!</span>`
       setTimeout(() => {
           msg.innerHTML = ''
       }, 2000)

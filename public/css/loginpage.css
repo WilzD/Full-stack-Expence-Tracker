@@ -19,9 +19,9 @@ html,body{
 }
 .wrapper{
   overflow: hidden;
-  max-width: 390px;
+  max-width: 380px;
   background: #fff;
-  padding: 42px;
+  padding: 25px;
   border-radius: 15px;
   box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
 }
@@ -190,4 +190,15 @@ form .btn input[type="submit"]{
 .meri-nav{
   text-decoration: none;
   color: red;
+}
+
+@media screen and (max-width: 680px) {
+  .wrapper {
+    overflow: hidden;
+    max-width: 330px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+}
 }

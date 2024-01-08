@@ -19,17 +19,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 //after selecting one value the rows per page will change
 async function setRowlistValue() {
-    document.getElementById('RowsLimit').onclick = async () => {
-        localStorage.setItem('rowsPerPage', document.getElementById('RowsLimit').value)
-        const page = 1
-        let rowlist = localStorage.getItem('rowsPerPage')
-        document.getElementById('RowsLimit').value = rowlist
-        const response = await axios.get(`/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
-        ShowExpences(response.data.expences, response.data.ispremiumuser)
-        ShowPagination(response.data.currentPage, response.data.hasNextPage, response.data.nextPage, response.data.hasPreviousPage, response.data.previousPage)
-    }
+    const val =document.getElementById('RowsLimit').value
+    localStorage.setItem('rowsPerPage',val)
+    const page = 1
+    let rowlist = localStorage.getItem('rowsPerPage')
+    document.getElementById('RowsLimit').value = rowlist
+    const response = await axios.get(`/expences?page=${page}&rowlist=${rowlist}`, { headers: { 'Authorization': token } })// passing in headers so that it will not seen in url
+    ShowExpences(response.data.expences, response.data.ispremiumuser)
+    ShowPagination(response.data.currentPage, response.data.hasNextPage, response.data.nextPage, response.data.hasPreviousPage, response.data.previousPage) 
 }
-setRowlistValue()
+
 
 //by this funtion we are making previous/ next buttons
 function ShowPagination(currentPage, hasNextPage, nextPage, hasPreviousPage, previousPage, lastPage) {
