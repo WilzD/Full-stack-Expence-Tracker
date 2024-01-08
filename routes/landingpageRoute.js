@@ -5,7 +5,7 @@ const express=require('express')
 const router=express.Router();
 
 const controller=require('../controller/landingPageController')
-router.get('/',controller.landingPage)
+router.get('13.49.238.81:/',controller.landingPage)
 router.get('/index',controller.indexPage)
 router.get('/index/home',controller.indexPage)
 router.get('/forgotPassword',controller.forgotPassword)

@@ -51,6 +51,7 @@ app.use(helmet())
 
 
 app.use((req,res)=>{
+    console.log(req.url)
     res.sendFile(path.join(__dirname,`${req.url}`))
 })
 
